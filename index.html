@@ -22,37 +22,27 @@
     </style>
 </head>
 <body>
-
-    <!-- 顶部状态提示和购买按钮 -->
     <div id="statusBanner" class="status-banner free-status">
         <span id="statusText">🔒 当前状态：免费版 | 单文件限制 10MB</span>
         <button class="upgrade-btn" onclick="alert('请跳转至页面底部，扫码赞助支持我升级维护此工具！')">🚀 支持解锁高级版</button>
     </div>
-
-    <!-- 广告预留位 -->
     <div id="ad-banner-top">
         <span>[ 广告预留位 - 等你拿到广告代码后粘贴到此 ]</span>
     </div>
-
-    <!-- 上传和压缩区域 -->
     <div class="upload-area" id="dropZone">
         <p>拖拽图片到这里，或者点击选择文件</p >
         <input type="file" id="fileInput" accept="image/*">
         <button class="compress-btn" id="compressBtn" disabled>开始压缩</button>
     </div>
-
-    <!-- 结果展示区域 -->
     <div class="result-area" id="resultArea">
         <h3>压缩结果：</h3>
         <div id="preview"></div>
         <p>原大小：<span id="originalSize">0</span> KB | 压缩后：<span id="compressedSize">0</span> KB</p >
         <a id="downloadLink" href=" " download="compressed_image.jpg" style="display:inline-block; background:#28a745; color:white; padding:10px 20px; text-decoration:none; border-radius:5px;">下载压缩图片</a >
     </div>
-
     <script>
         let selectedFile = null;
         let isPremium = localStorage.getItem('isPremium') === 'true';
-
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('paid') === 'true') {
             localStorage.setItem('isPremium', 'true');
@@ -60,7 +50,6 @@
             window.history.replaceState({}, document.title, window.location.pathname);
             location.reload();
         }
-
         function initStatus() {
             const banner = document.getElementById('statusBanner');
             const statusText = document.getElementById('statusText');
@@ -73,14 +62,11 @@
             }
         }
         initStatus();
-
         const fileInput = document.getElementById('fileInput');
         const dropZone = document.getElementById('dropZone');
         const compressBtn = document.getElementById('compressBtn');
         const resultArea = document.getElementById('resultArea');
-
         fileInput.addEventListener('change', (e) => { handleFile(e.target.files[0]); });
-
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
             dropZone.addEventListener(eventName, preventDefaults, false);
         });
@@ -92,7 +78,6 @@
             const files = e.dataTransfer.files;
             if (files.length > 0) handleFile(files[0]);
         });
-
         function handleFile(file) {
             if (!file) return;
             const maxSize = 10 * 1024 * 1024; 
@@ -106,14 +91,11 @@
             compressBtn.disabled = false;
             document.getElementById('originalSize').innerText = (file.size / 1024).toFixed(1);
         }
-
         compressBtn.addEventListener('click', compressImage);
-
         function compressImage() {
             if (!selectedFile) return;
             compressBtn.disabled = true;
             compressBtn.innerText = '正在压缩...';
-
             const reader = new FileReader();
             reader.onload = function (event) {
                 const img = new Image();
@@ -135,7 +117,6 @@
                     canvas.width = width;
                     canvas.height = height;
                     ctx.drawImage(img, 0, 0, width, height);
-
                     canvas.toBlob(function (blob) {
                         const url = URL.createObjectURL(blob);
                         document.getElementById('preview').innerHTML = `< img src="${url}" alt="压缩结果">`;
@@ -153,34 +134,25 @@
             reader.readAsDataURL(selectedFile);
         }
     </script>
-    
-    <!-- 底部页脚 + 赞赏码 -->
     <footer style="margin-top: 60px; padding: 20px 0; text-align: center; font-size: 14px; color: #888; border-top: 1px solid #eee;">
         <div style="background: #f9f9f9; padding: 20px; border-radius: 10px; margin-bottom: 20px; display: inline-block; width: 100%; max-width: 500px;">
             <p style="color: #333; font-size: 15px; font-weight: bold; margin-bottom: 15px;">这个工具帮到了你？请我喝杯奶茶吧！❤️</p >
             <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
-                
-                <!-- 微信收款码 (注意这里绝对没有多余的空格) -->
                 <div style="text-align: center;">
                     <p style="color: #07c160; margin-bottom: 5px;">微信支付</p >
-                    < img src="https://raw.githubusercontent.com/Corazon845/img-compress-tool/main/wechat-pay.png" alt="微信赞赏" style="width: 140px; height: 140px; border-radius: 8px; border: 1px solid #ddd;">
+                    <!-- ✅ 这里已改为绝对稳妥的本地绝对路径 -->
+                    < img src="/wechat-pay.png" alt="微信赞赏" style="width: 140px; height: 140px; border-radius: 8px; border: 1px solid #ddd;">
                 </div>
-
-                <!-- 支付宝收款码 (注意这里绝对没有多余的空格) -->
                 <div style="text-align: center;">
                     <p style="color: #1677ff; margin-bottom: 5px;">支付宝</p >
-                    < img src="https://raw.githubusercontent.com/Corazon845/img-compress-tool/main/alipay-pay.png" alt="支付宝赞赏" style="width: 140px; height: 140px; border-radius: 8px; border: 1px solid #ddd;">
+                    <!-- ✅ 这里已改为绝对稳妥的本地绝对路径 -->
+                    < img src="/alipay-pay.png" alt="支付宝赞赏" style="width: 140px; height: 140px; border-radius: 8px; border: 1px solid #ddd;">
                 </div>
-
             </div>
             <p style="color: #999; font-size: 12px; margin-top: 15px;">您的支持是我持续更新的动力！</p >
         </div>
-
         <p>© 2026 tinyimgshrink.com</p >
-        <p>
-            <a href="/privacy.html" target="_blank" style="color: #007bff; text-decoration: none;">隐私政策</a > | 
-            <a href="/terms.html" target="_blank" style="color: #007bff; text-decoration: none;">服务条款</a >
-        </p >
+        <p><a href="/privacy.html" target="_blank" style="color: #007bff; text-decoration: none;">隐私政策</a > | <a href="/terms.html" target="_blank" style="color: #007bff; text-decoration: none;">服务条款</a ></p >
     </footer>
 </body>
 </html>

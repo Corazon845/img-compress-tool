@@ -23,6 +23,9 @@
         
         .result-area { margin-top: 20px; display: none; border-top: 1px solid #eee; padding-top: 20px; }
         .result-area img { max-width: 100%; max-height: 400px; margin-bottom: 10px; }
+        
+        /* 🌟 广告预留区域的样式（先留白，等你加了代码就有广告了） */
+        #ad-banner-top { min-height: 60px; text-align: center; margin: 15px 0; background: #fafafa; border: 1px dashed #ddd; border-radius: 5px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 13px;}
     </style>
 </head>
 <body>
@@ -31,6 +34,11 @@
     <div id="statusBanner" class="status-banner free-status">
         <span id="statusText">🔒 当前状态：免费版 | 单文件限制 10MB</span>
         <button class="upgrade-btn" onclick="alert('请跳转至页面底部，扫码赞助支持我升级维护此工具！')">🚀 支持解锁高级版</button>
+    </div>
+
+    <!-- 🌟 广告预留位 1（等你拿到广告代码，粘贴到这里的 <div> 里） -->
+    <div id="ad-banner-top">
+        <span>[ 广告预留位 - 等你拿到广告代码后粘贴到此 ]</span>
     </div>
 
     <!-- 上传和压缩区域 -->
@@ -53,7 +61,7 @@
         let selectedFile = null;
         let isPremium = localStorage.getItem('isPremium') === 'true';
 
-        // 2. 处理支付回调（保留结构，以供未来接入爱发电使用）
+        // 2. 处理支付回调
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('paid') === 'true') {
             localStorage.setItem('isPremium', 'true');
@@ -104,7 +112,7 @@
             const maxSize = 10 * 1024 * 1024; // 10MB
             
             if (!isPremium && file.size > maxSize) {
-                alert(`❌ 图片过大！免费版限制单张图片不超过 10MB。\n您当前图片大小为 ${(file.size / 1024 / 1024).toFixed(1)}MB。\n请滚动到页面底部，扫码赞赏赞助我升级服务器能力，我将为您开放更大文件限制！`);
+                alert(`❌ 图片过大！免费版限制单张图片不超过 10MB。\n您当前图片大小为 ${(file.size / 1024 / 1024).toFixed(1)}MB。\n请滚动到页面底部，扫码赞赏赞助我，我将为您开放更大文件限制！`);
                 fileInput.value = '';
                 compressBtn.disabled = true;
                 return;
@@ -178,15 +186,15 @@
                 <!-- 微信收款码 -->
                 <div style="text-align: center;">
                     <p style="color: #07c160; margin-bottom: 5px;">微信支付</p >
-                    <!-- 👇 注意这里：直接匹配你在 GitHub 上的文件名 👇 -->
-                    < img src="/wechat-pay.png" alt="微信赞赏" style="width: 140px; height: 140px; border-radius: 8px; border: 1px solid #ddd;">
+                    <!-- ⚠️ 把下面 src="" 里的文字替换成你微信收款码的真实图片链接 -->
+                    < img src="https://github.com/Corazon845/img-compress-tool/blob/main/wechat-pay.png" alt="微信赞赏" style="width: 140px; height: 140px; border-radius: 8px; border: 1px solid #ddd;">
                 </div>
 
                 <!-- 支付宝收款码 -->
                 <div style="text-align: center;">
                     <p style="color: #1677ff; margin-bottom: 5px;">支付宝</p >
-                    <!-- 👇 注意这里：直接匹配你在 GitHub 上的文件名 👇 -->
-                    < img src="/alipay-pay.png" alt="支付宝赞赏" style="width: 140px; height: 140px; border-radius: 8px; border: 1px solid #ddd;">
+                    <!-- ⚠️ 把下面 src="" 里的文字替换成你支付宝收款码的真实图片链接 -->
+                    < img src="https://github.com/Corazon845/img-compress-tool/blob/main/alipay-pay.png" alt="支付宝赞赏" style="width: 140px; height: 140px; border-radius: 8px; border: 1px solid #ddd;">
                 </div>
 
             </div>

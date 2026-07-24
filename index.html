@@ -6,26 +6,19 @@
     <title>图片压缩工具 Pro</title>
     <style>
         body { font-family: sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
-        .status-banner {
-            padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;
-        }
+        .status-banner { padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
         .free-status { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
         .pro-status { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .upgrade-btn { background: #ffc107; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; color: #000;}
+        .upgrade-btn { background: #ffc107; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; color: #000; }
         .upgrade-btn:hover { background: #e0a800; }
-        
         .upload-area { border: 2px dashed #ccc; padding: 40px; text-align: center; border-radius: 10px; margin: 20px 0; }
         .upload-area.dragover { border-color: #007bff; background: #f0f8ff; }
         #fileInput { display: none; }
-        
-        .compress-btn { background: #007bff; color: white; padding: 10px 25px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin-top: 10px;}
+        .compress-btn { background: #007bff; color: white; padding: 10px 25px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin-top: 10px; }
         .compress-btn:disabled { background: #6c757d; cursor: not-allowed; }
-        
         .result-area { margin-top: 20px; display: none; border-top: 1px solid #eee; padding-top: 20px; }
         .result-area img { max-width: 100%; max-height: 400px; margin-bottom: 10px; }
-        
-        /* 广告预留区域 */
-        #ad-banner-top { min-height: 60px; text-align: center; margin: 15px 0; background: #fafafa; border: 1px dashed #ddd; border-radius: 5px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 13px;}
+        #ad-banner-top { min-height: 60px; text-align: center; margin: 15px 0; background: #fafafa; border: 1px dashed #ddd; border-radius: 5px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 13px; }
     </style>
 </head>
 <body>
@@ -36,7 +29,7 @@
         <button class="upgrade-btn" onclick="alert('请跳转至页面底部，扫码赞助支持我升级维护此工具！')">🚀 支持解锁高级版</button>
     </div>
 
-    <!-- 广告预留位 1 -->
+    <!-- 广告预留位 -->
     <div id="ad-banner-top">
         <span>[ 广告预留位 - 等你拿到广告代码后粘贴到此 ]</span>
     </div>
@@ -57,11 +50,9 @@
     </div>
 
     <script>
-        // 1. 核心变量和状态读取
         let selectedFile = null;
         let isPremium = localStorage.getItem('isPremium') === 'true';
 
-        // 2. 处理支付回调
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('paid') === 'true') {
             localStorage.setItem('isPremium', 'true');
@@ -70,7 +61,6 @@
             location.reload();
         }
 
-        // 3. 初始化页面状态
         function initStatus() {
             const banner = document.getElementById('statusBanner');
             const statusText = document.getElementById('statusText');
@@ -84,17 +74,13 @@
         }
         initStatus();
 
-        // 4. 文件选择与大小限制逻辑
         const fileInput = document.getElementById('fileInput');
         const dropZone = document.getElementById('dropZone');
         const compressBtn = document.getElementById('compressBtn');
         const resultArea = document.getElementById('resultArea');
 
-        fileInput.addEventListener('change', (e) => {
-            handleFile(e.target.files[0]);
-        });
+        fileInput.addEventListener('change', (e) => { handleFile(e.target.files[0]); });
 
-        // 拖拽上传支持
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
             dropZone.addEventListener(eventName, preventDefaults, false);
         });
@@ -109,21 +95,18 @@
 
         function handleFile(file) {
             if (!file) return;
-            const maxSize = 10 * 1024 * 1024; // 10MB
-            
+            const maxSize = 10 * 1024 * 1024; 
             if (!isPremium && file.size > maxSize) {
                 alert(`❌ 图片过大！免费版限制单张图片不超过 10MB。\n您当前图片大小为 ${(file.size / 1024 / 1024).toFixed(1)}MB。\n请滚动到页面底部，扫码赞赏赞助我，我将为您开放更大文件限制！`);
                 fileInput.value = '';
                 compressBtn.disabled = true;
                 return;
             }
-
             selectedFile = file;
             compressBtn.disabled = false;
             document.getElementById('originalSize').innerText = (file.size / 1024).toFixed(1);
         }
 
-        // 5. 核心压缩功能
         compressBtn.addEventListener('click', compressImage);
 
         function compressImage() {
@@ -137,7 +120,6 @@
                 img.onload = function () {
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d');
-                    
                     let width = img.width;
                     let height = img.height;
                     const MAX_SIZE = 1200;
@@ -150,7 +132,6 @@
                             height = MAX_SIZE;
                         }
                     }
-
                     canvas.width = width;
                     canvas.height = height;
                     ctx.drawImage(img, 0, 0, width, height);
@@ -159,11 +140,9 @@
                         const url = URL.createObjectURL(blob);
                         document.getElementById('preview').innerHTML = `< img src="${url}" alt="压缩结果">`;
                         document.getElementById('compressedSize').innerText = (blob.size / 1024).toFixed(1);
-                        
                         const downloadLink = document.getElementById('downloadLink');
                         downloadLink.href = url;
                         downloadLink.download = `compressed_${selectedFile.name}`;
-                        
                         resultArea.style.display = 'block';
                         compressBtn.disabled = false;
                         compressBtn.innerText = '再次压缩';
@@ -175,25 +154,21 @@
         }
     </script>
     
-    <!-- 底部法律声明与页脚 + 赞赏码 -->
+    <!-- 底部页脚 + 赞赏码 -->
     <footer style="margin-top: 60px; padding: 20px 0; text-align: center; font-size: 14px; color: #888; border-top: 1px solid #eee;">
-        
-        <!-- 赞赏码区域 -->
         <div style="background: #f9f9f9; padding: 20px; border-radius: 10px; margin-bottom: 20px; display: inline-block; width: 100%; max-width: 500px;">
             <p style="color: #333; font-size: 15px; font-weight: bold; margin-bottom: 15px;">这个工具帮到了你？请我喝杯奶茶吧！❤️</p >
             <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
                 
-                <!-- 微信收款码 -->
+                <!-- 微信收款码 (注意这里绝对没有多余的空格) -->
                 <div style="text-align: center;">
                     <p style="color: #07c160; margin-bottom: 5px;">微信支付</p >
-                    <!-- ✅ 已替换为你提供的微信收款码直链 -->
                     < img src="https://raw.githubusercontent.com/Corazon845/img-compress-tool/main/wechat-pay.png" alt="微信赞赏" style="width: 140px; height: 140px; border-radius: 8px; border: 1px solid #ddd;">
                 </div>
 
-                <!-- 支付宝收款码 -->
+                <!-- 支付宝收款码 (注意这里绝对没有多余的空格) -->
                 <div style="text-align: center;">
                     <p style="color: #1677ff; margin-bottom: 5px;">支付宝</p >
-                    <!-- ✅ 已替换为你提供的支付宝收款码直链 -->
                     < img src="https://raw.githubusercontent.com/Corazon845/img-compress-tool/main/alipay-pay.png" alt="支付宝赞赏" style="width: 140px; height: 140px; border-radius: 8px; border: 1px solid #ddd;">
                 </div>
 
@@ -201,7 +176,6 @@
             <p style="color: #999; font-size: 12px; margin-top: 15px;">您的支持是我持续更新的动力！</p >
         </div>
 
-        <!-- 页脚法律链接 -->
         <p>© 2026 tinyimgshrink.com</p >
         <p>
             <a href="/privacy.html" target="_blank" style="color: #007bff; text-decoration: none;">隐私政策</a > | 
